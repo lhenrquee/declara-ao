@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoramento dos Níveis dos Rios</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Estilos Gerais */
+        body, html {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #e3f2fd;
+            animation: fadeIn 1s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .container {
+            display: flex;
+        }
+
+        /* Menu Lateral */
+        .sidebar {
+            width: 250px;
+            background-color: #0078A8;
+            padding: 20px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .sidebar h2 {
+            margin-top: 0;
+        }
+
+        .sidebar button {
+            background-color: #004D73;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            text-align: left;
+        }
+        
+        .sidebar button:hover {
+            background-color: #005f86;
+        }
+
+        /* Conteúdo Principal */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+        }
+
+        /* Cabeçalho */
+        header {
+            background: linear-gradient(45deg, #0078A8, #004D73);
+            padding: 20px;
+            color: white;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Seções de Rios */
+        .card-rio {
+            display: none;
+            background-color: white;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: transform 0.3s, opacity 0.3s;
+        }
+
+        .card-rio.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .card-rio img {
+            display: block;
+            margin: 10px auto;
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .image-ref {
+            text-align: center;
+            font-size: 0.8em;
+            color: #555;
+        }
+
+        /* Gráfico */
+        .chart-container {
+            max-width: 800px;
+            margin: 20px auto;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Menu Lateral -->
+        <nav class="sidebar">
+            <h2>Menu de Rios</h2>
+            <button onclick="mostrarInfo('rio-negro')">Rio Negro</button>
+            <button onclick="mostrarInfo('rio-púrus')">Rio Púrus</button>
+            <button onclick="mostrarInfo('rio-solimoes')">Rio Solimões</button>
+            <button onclick="mostrarInfo('rio-tapajos')">Rio Tapajós</button>
+            <button onclick="mostrarInfo('rio-madeira')">Rio Madeira</button>
+        </nav>
+
+        <!-- Conteúdo Principal -->
+        <div class="main-content">
+            <!-- Cabeçalho -->
+            <header>
+                <h1>Período de Secas dos Rios de 2020-2024 - Atualizado 04/11/2024</h1>
+                <p>Rios amazônicos registram baixa histórica um mês antes do pico da estiagem</p>
+            </header>
+
+            <!-- Informações do Rio Negro -->
+            <div class="card-rio" id="card-rio-negro">
+                <p><strong>Rio Negro</strong> - Nível atual: 12,66 Metros</p>
+                <img src="https://www.insurancejournal.com/app/uploads/2024/10/drought-hits-amazon-port-in-brazil-AP-580x416.jpg" alt="Rio Negro em seca">
+                <div class="image-ref">
+                    <p>Fonte da imagem: <a href="https://www.insurancejournal.com/app/uploads/2024/10/drought-hits-amazon-port-in-brazil-AP-580x416.jpg">Insurance Journal</a></p>
+                </div>
+                <p>O Rio Negro, um dos maiores e mais importantes rios da Amazônia, enfrenta uma crise hídrica sem precedentes. Com um nível atual de 12,66 metros, o rio registrou sua marca mais baixa em mais de cem anos...</p>
+                <div class="image-ref">
+                    <h5>Fontes de Dados:</h5>
+                    <p>2020: <a href="https://asterweb.jpl.nasa.gov/gallery-detail.asp?name=rionegro">Asterweb</a></p>
+                    <p>2021: <a href="https://www.socioambiental.org/en/socio-environmental-news/Rio-Negro-is-experiencing-historic-drought-and-S%C3%A3o-Gabriel-da-Cascade-is-at-risk-of">Socioambiental</a></p>
+                    <p>2022: <a href="https://www.enn.com/articles/73493-drought-on-the-rio-negro">ENN</a></p>
+                    <p>2023: <a href="https://www.naturalhazards.nasa.gov/images/151961/drought-on-the-rio-negro">Natural Hazards (NASA)</a></p>
+                    <p>2024: <a href="https://www.voanews.com/a/river-level-in-amazon-rainforest-hits-122-year-low-amid-drought-wildfires-/7811024.html">VOA News</a></p>
+                </div>
+            </div>
+
+            <!-- Informações do Rio Tapajós -->
+            <div class="card-rio" id="card-rio-tapajos">
+                <p><strong>Rio Tapajós</strong> - Nível atual: 8,3 Metros</p>
+                <img src="https://www.paraterraboa.com/wp-content/uploads/2023/10/Seca_Santarem2.jpg" alt="Rio Tapajós em seca">
+                <div class="image-ref">
+                    <p>Fonte da imagem: <a href="https://images.app.goo.gl/nSGiMm1uDTJ39axM8">Wikipedia</a></p>
+                </div>
+                <p>O Rio Tapajós, que corta a região norte do Brasil, também está sofrendo os impactos das secas prolongadas. Com um nível de 8,3 metros em 2024, o rio apresenta uma das menores marcas dos últimos anos...</p>
+                <div class="image-ref">
+                    <h5>Fontes de Dados:</h5>
+                    <p>2020: <a href="https://www.amazonialatitude.com/2022/01/25/agua-mais-turva-no-rio-tapajos-pode-vir-do-garimpo-mostra-satelite/#:~:text=S%C3%B3%20na%20bacia%20do%20Tapaj%C3%B3s,no%20Rio%20Grande%20do%20Sul.">Amazonia Latitude 2020</a></p>
+                    <p>2021: <a href="https://www.gov.br/ana/pt-br/assuntos/noticias-e-eventos/noticias/ana-declara-situacao-de-escassez-hidrica-no-rio-tapajos-pa">gov.com 2021</a></p>
+                    <p>2022: <a href="https://www.tapajosdefato.com.br/noticia/600/rio-tapajos-pode-enfrentar-uma-das-maiores-enchentes-da-sua-historia-em-2022">TAPAJÓS DE FATO 2022</a></p>
+                    <p>2023: <a href="https://g1.globo.com/pa/santarem-regiao/noticia/2024/09/24/com-seca-severa-rio-tapajos-atinge-115-metro-e-ja-afeta-turismo-em-alter-do-chao.ghtml#:~:text=O%20n%C3%ADvel%20do%20rio%20Tapaj%C3%B3s%20em%20Santar%C3%A9m%20est%C3%A1%2095%20cm,manancial%20chegou%20a%2050%20cent%C3%ADmetros.">g1 2023</a></p>
+                    <p>2024: <a href="https://g1.globo.com/pa/santarem-regiao/noticia/2024/10/08/seca-do-rio-tapajos-atinge-niveis-historicos-e-afeta-comunidades-da-ribeirinhas.ghtml">g1 2024</a></p>
+                </div>
+                <!-- Segunda imagem -->
+                <img src="https://m.psecn.photoshelter.com/img-get/I00007jnxlBF310I/s/1200/I00007jnxlBF310I.jpg" alt="Rio Tapajós, vista aérea">
+                <div class="image-ref">
+                    <p>Fonte da imagem: <a href="https://images.app.goo.gl/EqiBxo1xXuRHpqes8">Wikipedia</a></p>
+                </div>
+            </div>
+
+            <!-- Gráfico -->
+            <div class="chart-container">
+                <canvas id="riverLevelsChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script para exibir informações dos rios -->
+    <script>
+        function mostrarInfo(rio) {
+            document.querySelectorAll('.card-rio').forEach(card => card.classList.remove('show'));
+            document.getElementById(`card-${rio}`).classList.add('show');
+        }
+    </script>
+
+    <!-- Script do Gráfico -->
+    <script>
+        const ctx = document.getElementById('riverLevelsChart').getContext('2d');
+        const riverLevelsChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['2020', '2021', '2022', '2023', '2024'],
+                datasets: [
+                    { label: 'Rio Negro', data: [13.5, 14.2, 13.1, 12.5, 12.66], borderColor: 'rgba(75, 192, 192, 1)', fill: false },
+                    { label: 'Rio Tapajós', data: [10.5, 9.8, 8.9, 8.1, 8.3], borderColor: 'rgba(255, 99, 132, 1)', fill: false }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.dataset.label + ': ' + tooltipItem.raw + ' m';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        title: {
+                            display: true,
+                            text: 'Nível (Metros)'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Ano'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
